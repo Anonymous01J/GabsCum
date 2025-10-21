@@ -12,7 +12,7 @@
     <link href="./assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <audio id="audio" autoplay loop>
+    <audio id="audio" loop>
       <source src="./assets/mp3/04-Chayanne-Un-Siglo-Sin-Ti.mp3" type="audio/mpeg">
     </audio>
     <div id="walter-container">
@@ -135,21 +135,38 @@
             mirror: true
         });
 
-      let audioStarted = false;
-      function tryPlayAudio() {
-        if (!audioStarted) {
-          const audio = document.getElementById("audio");
-          audio.play().then(() => {
-            audioStarted = true;
-            window.removeEventListener("scroll", tryPlayAudio);
-            window.removeEventListener("touchstart", tryPlayAudio);
-          }).catch((e) => {
-            console.log("Autoplay bloqueado:", e);
-          });
+        let audioStarted = false;
+
+        function tryPlayAudio() {
+          if (!audioStarted) {
+            const audio = document.getElementById("audio");
+            if (audio) {
+              audio.play().then(() => {
+                audioStarted = true;
+                removeListeners();
+              }).catch((e) => {
+                console.log("Autoplay bloqueado:", e);
+              });
+            }
+          }
         }
-      }
-      window.addEventListener("scroll", tryPlayAudio);
-      window.addEventListener("touchstart", tryPlayAudio);
+
+        function removeListeners() {
+          window.removeEventListener("click", tryPlayAudio);
+          window.removeEventListener("pointerdown", tryPlayAudio);
+          window.removeEventListener("touchstart", tryPlayAudio);
+          window.removeEventListener("scroll", tryPlayAudio);
+          window.removeEventListener("mouseover", tryPlayAudio);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          window.addEventListener("click", tryPlayAudio);
+          window.addEventListener("pointerdown", tryPlayAudio);
+          window.addEventListener("touchstart", tryPlayAudio);
+          window.addEventListener("scroll", tryPlayAudio);
+          window.addEventListener("mouseover", tryPlayAudio);
+        });
+
     </script>
 </body>
 </html>
