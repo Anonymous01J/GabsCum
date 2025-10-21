@@ -135,18 +135,21 @@
             mirror: true
         });
 
-        let audioStarted = false;
-        function playAudioOnScroll() {
-            if (!audioStarted) {
-              const audio = document.getElementById("audio");
-              audio.play().catch((e) => {
-                console.log("Autoplay bloqueado por el navegador:", e);
-              });
-              audioStarted = true;
-              window.removeEventListener("scroll", playAudioOnScroll);
-            }
+      let audioStarted = false;
+      function tryPlayAudio() {
+        if (!audioStarted) {
+          const audio = document.getElementById("audio");
+          audio.play().then(() => {
+            audioStarted = true;
+            window.removeEventListener("scroll", tryPlayAudio);
+            window.removeEventListener("touchstart", tryPlayAudio);
+          }).catch((e) => {
+            console.log("Autoplay bloqueado:", e);
+          });
         }
-        window.addEventListener("scroll", playAudioOnScroll);
+      }
+      window.addEventListener("scroll", tryPlayAudio);
+      window.addEventListener("touchstart", tryPlayAudio);
     </script>
 </body>
 </html>
