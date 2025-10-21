@@ -255,21 +255,22 @@ div.ribbons p {
     }
     
     #walter-container h1 {
-        font-size: 5em; 
+        font-size: 3.5em; 
         padding-top: 8px;
         word-wrap: break-word;
     }
     
     #walter-container h3 {
-        font-size: 2.5em;
+        font-size: 2em;
         word-wrap: break-word;
     }
     
     #walter-container p {
         margin: 1em 10px;
-        font-size: 1.4em;
+        font-size: 1.3em;
         word-wrap: break-word;
         max-width: 100%;
+        line-height: 1.4em;
     }
     
     #walter-container ul {
@@ -343,25 +344,26 @@ div.ribbons p {
     }
     
     .small-copy {
-        font-size: 1.25em;
+        font-size: 1.3em;
     }
     
     .medium-copy {
-        font-size: 1.5em;
+        font-size: 1.6em;
     }
     
     .large-copy {
-        font-size: 2em;
+        font-size: 2.2em;
         line-height: 1.3em;
     }
     
     .copyright {
-        font-size: 1.2em;
+        font-size: 1.1em;
+        line-height: 1.4em;
     }
 
     .download-button {
-        padding: 12px 20px;
-        font-size: 1.3em;
+        padding: 15px 25px;
+        font-size: 1.4em;
         width: calc(100% - 20px);
         max-width: 100%;
     }
@@ -377,16 +379,17 @@ div.ribbons p {
     }
     
     #walter-container h1 {
-        font-size: 40px;
+        font-size: 2.5em;
     }
     
     #walter-container h3 {
-        font-size: 18px;
+        font-size: 1.5em;
     }
     
     #walter-container p {
         margin: 1em 5px;
-        font-size: 16px;
+        font-size: 1.1em;
+        line-height: 1.4em;
     }
     
     #walter-container ul#second_row li img,
@@ -395,26 +398,27 @@ div.ribbons p {
     }
     
     .small-copy {
-        font-size: 16px;
+        font-size: 1.1em;
     }
     
     .medium-copy {
-        font-size: 18px;
+        font-size: 1.3em;
     }
     
     .large-copy {
-        font-size: 24px;
+        font-size: 1.8em;
     }
     
     .copyright {
-        font-size: 14px;
+        font-size: 1em;
         padding: 0 5px 20px;
         word-wrap: break-word;
+        line-height: 1.4em;
     }
     
     .download-button {
-        padding: 10px 15px;
-        font-size: 0.9em;
+        padding: 12px 20px;
+        font-size: 1.2em;
         width: calc(100% - 10px);
     }
     
