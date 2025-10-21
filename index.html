@@ -12,7 +12,7 @@
     <link href="./assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <audio id="audio" loop>
+    <audio id="audio" loop preload="auto">
       <source src="./assets/mp3/04-Chayanne-Un-Siglo-Sin-Ti.mp3" type="audio/mpeg">
     </audio>
     
@@ -87,8 +87,9 @@
         </p>
         
         <div id="banner-container" data-aos="fade-up" data-aos-duration="1000">
+            <h3 class="yellow" data-aos-delay="200">Me perdonas(?</h3>
             <img src="./assets/img/raton.webp" alt="raton" />
-            <h3 class="yellow" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Me perdonas(?</h3>
+            <h4 class="yellow">Toca el ratón</h4>
         </div>
         
         <div id="donations-so-far" data-aos="zoom-in" data-aos-duration="1000">
@@ -135,44 +136,72 @@
             mirror: false
         });
 
-        let audioStarted = false;
         const audio = document.getElementById("audio");
+        let audioStarted = false;
+        let userInteracted = false;
 
-        function tryPlayAudio() {
+        // Función para habilitar audio (solo con clicks/touches reales)
+        function enableAudio() {
+            if (!userInteracted) {
+                userInteracted = true;
+                console.log(" Usuario interactuó, audio habilitado");
+            }
+        }
+
+        // SOLO click y touch cuentan como interacción válida
+        document.addEventListener("click", enableAudio, { once: true });
+        document.addEventListener("touchstart", enableAudio, { once: true });
+        document.addEventListener("keydown", enableAudio, { once: true });
+
+        // Observador de intersección
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !audioStarted) {
+                    if (userInteracted) {
+                        playAudio();
+                    } else {
+                        console.log(" Esperando interacción del usuario para reproducir música");
+                        // Cuando haya interacción, reproducir
+                        const playOnInteraction = () => {
+                            if (!audioStarted) {
+                                playAudio();
+                            }
+                        };
+                        document.addEventListener("click", playOnInteraction, { once: true });
+                        document.addEventListener("touchstart", playOnInteraction, { once: true });
+                    }
+                }
+            });
+        }, {
+            threshold: 0.7
+        });
+
+        // Función para reproducir el audio
+        function playAudio() {
             if (!audioStarted && audio) {
                 audio.play()
                     .then(() => {
                         audioStarted = true;
-                        console.log("Audio reproduciendo");
-                        removeListeners();
+                        audio.volume = 0.7;
+                        console.log(" Música reproduciendo");
                     })
                     .catch((e) => {
-                        console.log("Autoplay bloqueado, esperando interacción:", e);
+                        console.log(" Error al reproducir:", e.message);
                     });
             }
         }
 
-        function removeListeners() {
-            document.removeEventListener("click", tryPlayAudio);
-            document.removeEventListener("touchstart", tryPlayAudio);
-            document.removeEventListener("keydown", tryPlayAudio);
-            document.removeEventListener("scroll", tryPlayAudio);
-            window.removeEventListener("mousemove", tryPlayAudio);
-        }
-
+        // Esperar a que el DOM esté listo
         document.addEventListener("DOMContentLoaded", () => {
-            tryPlayAudio();
+            const triggerElement = document.getElementById("banner-container");
             
-            document.addEventListener("click", tryPlayAudio);
-            document.addEventListener("touchstart", tryPlayAudio, { passive: true });
-            document.addEventListener("keydown", tryPlayAudio);
-            document.addEventListener("scroll", tryPlayAudio, { passive: true });
-            window.addEventListener("mousemove", tryPlayAudio);
-            
-            setTimeout(tryPlayAudio, 1000);
+            if (triggerElement) {
+                observer.observe(triggerElement);
+                console.log(" Observando banner para activar música");
+            } else {
+                console.error(" No se encontró el elemento trigger");
+            }
         });
-
-        document.body.style.cursor = 'default';
     </script>
 </body>
 </html>
