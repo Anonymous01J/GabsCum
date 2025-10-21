@@ -15,6 +15,7 @@
     <audio id="audio" loop>
       <source src="./assets/mp3/04-Chayanne-Un-Siglo-Sin-Ti.mp3" type="audio/mpeg">
     </audio>
+    
     <div id="walter-container">
         <h1 data-aos="fade-down" data-aos-duration="1000">Feliz cum Gabs</h1>
         <h3 class="yellow" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Amiga, Transtornada &amp; Futura Geóloga</h3>
@@ -125,48 +126,53 @@
         PD: Si Walter Jr pudo hacer un website para salvar a su papá, pq yo no hacer uno para intentar<br/> salvar nuestra amistad.
     </div>
 
-    <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         AOS.init({
             duration: 800,
             easing: 'ease-in-out',
             once: true,
-            mirror: true
+            mirror: false
         });
 
         let audioStarted = false;
+        const audio = document.getElementById("audio");
 
         function tryPlayAudio() {
-          if (!audioStarted) {
-            const audio = document.getElementById("audio");
-            if (audio) {
-              audio.play().then(() => {
-                audioStarted = true;
-                removeListeners();
-              }).catch((e) => {
-                console.log("Autoplay bloqueado:", e);
-              });
+            if (!audioStarted && audio) {
+                audio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        console.log("Audio reproduciendo");
+                        removeListeners();
+                    })
+                    .catch((e) => {
+                        console.log("Autoplay bloqueado, esperando interacción:", e);
+                    });
             }
-          }
         }
 
         function removeListeners() {
-          window.removeEventListener("click", tryPlayAudio);
-          window.removeEventListener("pointerdown", tryPlayAudio);
-          window.removeEventListener("touchstart", tryPlayAudio);
-          window.removeEventListener("scroll", tryPlayAudio);
-          window.removeEventListener("mouseover", tryPlayAudio);
+            document.removeEventListener("click", tryPlayAudio);
+            document.removeEventListener("touchstart", tryPlayAudio);
+            document.removeEventListener("keydown", tryPlayAudio);
+            document.removeEventListener("scroll", tryPlayAudio);
+            window.removeEventListener("mousemove", tryPlayAudio);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-          window.addEventListener("click", tryPlayAudio);
-          window.addEventListener("pointerdown", tryPlayAudio);
-          window.addEventListener("touchstart", tryPlayAudio);
-          window.addEventListener("scroll", tryPlayAudio);
-          window.addEventListener("mouseover", tryPlayAudio);
+            tryPlayAudio();
+            
+            document.addEventListener("click", tryPlayAudio);
+            document.addEventListener("touchstart", tryPlayAudio, { passive: true });
+            document.addEventListener("keydown", tryPlayAudio);
+            document.addEventListener("scroll", tryPlayAudio, { passive: true });
+            window.addEventListener("mousemove", tryPlayAudio);
+            
+            setTimeout(tryPlayAudio, 1000);
         });
 
+        document.body.style.cursor = 'default';
     </script>
 </body>
 </html>
