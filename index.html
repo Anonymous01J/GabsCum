@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,10 +12,12 @@
     <link href="./assets/css/style.css" rel="stylesheet">
 </head>
 <body>
+
+    <!-- AUDIO -->
     <audio id="audio" loop preload="auto">
       <source src="./assets/mp3/04-Chayanne-Un-Siglo-Sin-Ti.mp3" type="audio/mpeg">
     </audio>
-    
+
     <div id="walter-container">
         <h1 data-aos="fade-down" data-aos-duration="1000">Feliz cum Gabs</h1>
         <h3 class="yellow" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Amiga, Transtornada &amp; Futura Geóloga</h3>
@@ -88,21 +90,24 @@
         
         <div id="banner-container" data-aos="fade-up" data-aos-duration="1000">
             <h3 class="yellow" data-aos-delay="200">Me perdonas(?</h3>
-            <img src="./assets/img/raton.webp" alt="raton" />
+
+            <!-- AQUI: imagen con ID para el clic -->
+            <img id="raton-btn" src="./assets/img/raton.webp" alt="raton" />
+
             <h3 class="yellow">Toca el ratón</h3>
         </div>
         
         <div id="donations-so-far" data-aos="zoom-in" data-aos-duration="1000">
             <p class="medium-copy white middle">Tu Regalo Está Aquí</p>
             <p class="medium-copy yellow middle">Meses de trabajo. Una amistad que extraño. Un cumpleaños que quería celebrar contigo.</p>
-            <CENTER>
+            <center>
                 <a class="download-button" href="https://www.mediafire.com/file/rdd63a386iwfg5s/TamaDoki.apk/file" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="300" target="_blank">
                     DESCARGAR REGALO
                 </a>
                 <p class="middle" style="margin-top: 15px; color: #c1bdbd; font-size: 0.9em;">
                     (Esto es lo que obtienes cuando dejas que alguien que te extraña pase meses programando)
                 </p>
-            </CENTER>         
+            </center>         
         </div>
 
         <p class="small-copy white" data-aos="fade-up" data-aos-duration="800">
@@ -136,72 +141,21 @@
             mirror: false
         });
 
+        /* =====================
+           REPRODUCIR AUDIO AL CLIC EN EL RATÓN
+           ===================== */
         const audio = document.getElementById("audio");
-        let audioStarted = false;
-        let userInteracted = false;
+        const ratonBtn = document.getElementById("raton-btn");
 
-        // Función para habilitar audio (solo con clicks/touches reales)
-        function enableAudio() {
-            if (!userInteracted) {
-                userInteracted = true;
-                console.log(" Usuario interactuó, audio habilitado");
-            }
-        }
-
-        // SOLO click y touch cuentan como interacción válida
-        document.addEventListener("click", enableAudio, { once: true });
-        document.addEventListener("touchstart", enableAudio, { once: true });
-        document.addEventListener("keydown", enableAudio, { once: true });
-
-        // Observador de intersección
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !audioStarted) {
-                    if (userInteracted) {
-                        playAudio();
-                    } else {
-                        console.log(" Esperando interacción del usuario para reproducir música");
-                        // Cuando haya interacción, reproducir
-                        const playOnInteraction = () => {
-                            if (!audioStarted) {
-                                playAudio();
-                            }
-                        };
-                        document.addEventListener("click", playOnInteraction, { once: true });
-                        document.addEventListener("touchstart", playOnInteraction, { once: true });
-                    }
-                }
-            });
-        }, {
-            threshold: 0.7
-        });
-
-        // Función para reproducir el audio
-        function playAudio() {
-            if (!audioStarted && audio) {
-                audio.play()
-                    .then(() => {
-                        audioStarted = true;
-                        audio.volume = 0.7;
-                        console.log(" Música reproduciendo");
-                    })
-                    .catch((e) => {
-                        console.log(" Error al reproducir:", e.message);
-                    });
-            }
-        }
-
-        // Esperar a que el DOM esté listo
-        document.addEventListener("DOMContentLoaded", () => {
-            const triggerElement = document.getElementById("banner-container");
-            
-            if (triggerElement) {
-                observer.observe(triggerElement);
-                console.log(" Observando banner para activar música");
-            } else {
-                console.error(" No se encontró el elemento trigger");
-            }
-        });
+        ratonBtn.addEventListener("click", () => {
+            audio.play()
+                .then(() => {
+                    audio.volume = 0.7;
+                    console.log("🎵 Música reproduciendo al clicar el ratón");
+                })
+                .catch(err => console.log("Error al reproducir:", err));
+        }, { once: true });
     </script>
+
 </body>
 </html>
